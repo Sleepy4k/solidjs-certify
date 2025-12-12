@@ -40,6 +40,7 @@ const App: Component = () => {
     y: 300,
     fontSize: 40,
     fontFamily: "Great Vibes",
+    fontWeight: "400",
     color: "#000000",
     align: "center",
     dataKey: "nama",
@@ -104,7 +105,7 @@ const App: Component = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, 0, 0);
 
-    ctx.font = `${c.fontSize}px "${c.fontFamily}"`;
+    ctx.font = `${c.fontWeight} ${c.fontSize}px "${c.fontFamily}"`;
     ctx.fillStyle = c.color;
     ctx.textAlign = c.align as CanvasTextAlign;
     ctx.textBaseline = "middle";
@@ -167,7 +168,7 @@ const App: Component = () => {
       ctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
       ctx.drawImage(img, 0, 0);
 
-      ctx.font = `${config.fontSize}px "${config.fontFamily}"`;
+      ctx.font = `${config.fontWeight} ${config.fontSize}px "${config.fontFamily}"`;
       ctx.fillStyle = config.color;
       ctx.textAlign = config.align as CanvasTextAlign;
       ctx.textBaseline = "middle";
@@ -217,7 +218,7 @@ const App: Component = () => {
           </label>
           <textarea
             class="w-full h-32 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm font-mono"
-            value={jsonData()}
+            value={jsonData().length > 0 ? jsonData() : "[]"}
             onInput={(e) => setJsonData(e.currentTarget.value)}
             placeholder='[{"nama": "Andi", "peran": "Peserta"}]'
           ></textarea>
@@ -250,25 +251,51 @@ const App: Component = () => {
             Pengaturan Teks
           </h3>
           <div class="space-y-3">
-            <div>
-              <label class="text-xs text-gray-500 font-semibold mb-1 block">
-                Font Family
-              </label>
-              <select
-                class="w-full border rounded p-2 text-sm bg-white focus:ring-1 focus:ring-blue-500"
-                value={config.fontFamily}
-                onChange={(e) =>
-                  setConfig({ fontFamily: e.currentTarget.value })
-                }
-              >
-                <option value="Arial">Arial</option>
-                <option value="Times New Roman">Times New Roman</option>
-                <option value="Great Vibes">Great Vibes (Script)</option>
-                <option value="Montserrat">Montserrat</option>
-                <option value="Playfair Display">Playfair Display</option>
-                <option value="Roboto">Roboto</option>
-              </select>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="text-xs text-gray-500 font-semibold mb-1 block">
+                  Font Family
+                </label>
+                <select
+                  class="w-full border rounded p-2 text-sm bg-white focus:ring-1 focus:ring-blue-500"
+                  value={config.fontFamily}
+                  onChange={(e) =>
+                    setConfig({ fontFamily: e.currentTarget.value })
+                  }
+                >
+                  <option value="Arial">Arial</option>
+                  <option value="Times New Roman">Times New Roman</option>
+                  <option value="Great Vibes">Great Vibes (Script)</option>
+                  <option value="Montserrat">Montserrat</option>
+                  <option value="Playfair Display">Playfair Display</option>
+                  <option value="Roboto">Roboto</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="text-xs text-gray-500 font-semibold mb-1 block">
+                  Font Weight
+                </label>
+                <select
+                  class="w-full border rounded p-2 text-sm bg-white focus:ring-1 focus:ring-blue-500"
+                  value={config.fontWeight}
+                  onChange={(e) =>
+                    setConfig({ fontWeight: e.currentTarget.value })
+                  }
+                >
+                  <option value="100">Thin</option>
+                  <option value="200">Extra Light</option>
+                  <option value="300">Light</option>
+                  <option value="400">Normal</option>
+                  <option value="500">Medium</option>
+                  <option value="600">Semi Bold</option>
+                  <option value="700">Bold</option>
+                  <option value="800">Extra Bold</option>
+                  <option value="900">Black</option>
+                </select>
+              </div>
             </div>
+
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="text-xs text-gray-500 font-semibold mb-1 block">
@@ -276,13 +303,16 @@ const App: Component = () => {
                 </label>
                 <input
                   type="number"
+                  min={1}
+                  max={200}
                   class="w-full border rounded p-2 text-sm focus:ring-1 focus:ring-blue-500"
-                  value={config.fontSize}
+                  value={config.fontSize || 0}
                   onInput={(e) =>
                     setConfig({ fontSize: parseInt(e.currentTarget.value) })
                   }
                 />
               </div>
+
               <div>
                 <label class="text-xs text-gray-500 font-semibold mb-1 block">
                   Color
@@ -295,6 +325,7 @@ const App: Component = () => {
                 />
               </div>
             </div>
+
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="text-xs text-gray-500 font-semibold mb-1 block">
@@ -303,12 +334,13 @@ const App: Component = () => {
                 <input
                   type="number"
                   class="w-full border rounded p-2 text-sm focus:ring-1 focus:ring-blue-500"
-                  value={config.x}
+                  value={config.x || 0}
                   onInput={(e) =>
                     setConfig({ x: parseInt(e.currentTarget.value) })
                   }
                 />
               </div>
+
               <div>
                 <label class="text-xs text-gray-500 font-semibold mb-1 block">
                   Posisi Y
@@ -316,13 +348,14 @@ const App: Component = () => {
                 <input
                   type="number"
                   class="w-full border rounded p-2 text-sm focus:ring-1 focus:ring-blue-500"
-                  value={config.y}
+                  value={config.y || 0}
                   onInput={(e) =>
                     setConfig({ y: parseInt(e.currentTarget.value) })
                   }
                 />
               </div>
             </div>
+
             <div>
               <label class="text-xs text-gray-500 font-semibold mb-1 block">
                 Alignment
